@@ -1,0 +1,20 @@
+// var express = require("express");
+// var router = express.Router();
+// const dashboard = require("../models/Controller/dashboard");
+
+// router.post("/upcoming_event", dashboard.createEvent);
+// router.post("/upcoming_event/update", dashboard.updateEvent);
+// router.get("/upcoming_event/get", dashboard.getAllEvent);
+// router.get("/upcoming_project/get", dashboard.getAllProject);
+// router.get("/upcoming_project/:email", dashboard.getProjectByEmail);
+// router.get("/upcoming_event/get_by_date", dashboard.getEventByDate);
+// router.post("/public_holiday", dashboard.createHoliday);
+// router.post("/performance", dashboard.performanceGenerator);
+// router.post("/create_performance", dashboard.createPerformance);
+// router.get("/public_holiday/get", dashboard.getAllHoliday);
+// router.post("/public_holiday/update", dashboard.updateHoliday);
+// router.get("/performance/:email", dashboard.getPerformanceByEmail);
+// router.post("/delete_event/:eventId", dashboard.deleteEvent);
+// router.post("/delete_holiday/:holidayId", dashboard.deleteHoliday);
+// router.post("/createProject", dashboard.createProject);
+// module.exports = router;
