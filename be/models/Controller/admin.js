@@ -1,6 +1,7 @@
 const db = require("../Entity");
 const users = db.users;
 const teams = db.teams;
+const scores = db.scores;
 const { decodeToken } = require("../../config/jwtConfig");
 // Methods
 const validateAdmin = async (req, res) => {
@@ -36,6 +37,29 @@ const getTeams = async (req, res) => {
   }
 };
 
+
+const postScore = async (req, res) => {
+  console.log(req.body);
+  try {
+    if (req.body.team_id && req.body.innings) {
+      let { team_id, innings, score, wickets, overs } = req.body;
+        await scores.create({
+          team_id : team_id,
+          innings : innings,
+          score : score,
+          wickets : wickets,
+          overs : overs,
+        });
+        
+        res.send({ status: 200, message: "Match Started" });
+    } else {
+      res.status(400).send({ message: "Delayed due to rain" });
+    }
+  } catch (error) {
+    res.status(500).send({ status: 400, message: "abonded" });
+  }
+};
+
 // const updateProjectAllocation = async (req, res) => {
 //   console.log(req.body);
 //   let findData = projects.findOne({
@@ -65,4 +89,5 @@ const getTeams = async (req, res) => {
 module.exports = {
   validateAdmin,
   getTeams,
+  postScore,
 };

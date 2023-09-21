@@ -26,4 +26,22 @@ export const updateMatchDetails = async (teamId, matchDetails) => {
   }
 };
 
+export const createMatchRecord = async (teamId, innings) => {
+    let response = await axios
+    .post(`${env.REACT_APP_API}/admin/post_score`, {
+      team_id: teamId,
+      innings : innings,
+      score: 0, // Initialize with 0 score
+      wickets: 0, // Initialize with 0 wickets
+      overs: 0.0, // Initialize with 0.0 overs
+    })
+    .then((res) => {
+      return res;
+    })
+    .catch((error) => {
+      return error.response;
+    });
+  return response;
+};
+
 

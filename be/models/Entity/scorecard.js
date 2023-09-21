@@ -1,7 +1,7 @@
 module.exports = (sequelize, DataTypes) => {
     const Scorecard = sequelize.define("scores", {
-      team_id: {
-        type: DataTypes.INTEGER,
+      team: {
+        type: DataTypes.STRING,
         allowNull: false,
       },
       score: {
@@ -15,7 +15,7 @@ module.exports = (sequelize, DataTypes) => {
         defaultValue: 0,
       },
       innings: {
-        type: DataTypes.ENUM('batting', 'fielding'),
+        type: DataTypes.ENUM('first', 'second'),
         allowNull: false,
       },
       overs: {

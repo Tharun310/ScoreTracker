@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { fetchTeams, updateMatchDetails } from "../../Service/adminapi";
+import { fetchTeams, updateMatchDetails, createMatchRecord } from "../../Service/adminapi";
 import { ToastContainer } from "react-toastify";
 import { CheckAdminComponent } from "../../Service/AdminSecurity";
 import './admin.css';
@@ -11,11 +11,12 @@ import './admin.css';
 function AdminDashboard() {
   var [teams, setTeams] = useState([]);
   const [selectedTeams, setSelectedTeams] = useState({ battingTeam: '', fieldingTeam: '' });
-  const [matchDetails, setMatchDetails] = useState({ innings: 'batting', score: 0, wickets: 0, overs: 0 });
+  const [matchDetails, setMatchDetails] = useState({ innings: 'first', score: 0, wickets: 0, overs: 0 });
 
   const loadData = async () => {
     let getTeamDetails = await fetchTeams();
     // console.log(getTeamDetails.data.getData)
+   
     const teamsArray = Object.values(getTeamDetails.data.getData);
     // console.log(teamsArray);
     try {
@@ -36,21 +37,61 @@ function AdminDashboard() {
     setSelectedTeams((prevTeams) => ({ ...prevTeams, [teamType]: teamId }));
   };
 
-  const handleMatchDetailsUpdate = () => {
 
-    const { battingTeam } = selectedTeams;
-    updateMatchDetails(battingTeam, matchDetails)
+const handleMatchDetailsUpdate = () => {
+  const { battingTeam, fieldingTeam } = selectedTeams;
+  const { innings, score, wickets, overs } = matchDetails;
+
+  if (innings === 'first') {
+    // Update the details for the batting team
+    updateMatchDetails(battingTeam, { score, wickets, innings, overs })
       .then((updatedDetails) => {
-        // Handle success and update UI as needed.
-        console.log('Match details updated:', updatedDetails);
+        console.log('First inning match details updated:', updatedDetails);
       })
       .catch((error) => {
-        console.error('Error updating match details:', error);
+        console.error('Error updating first inning match details:', error);
       });
-  };
+  } else if (innings === 'second') {
+    // Update the details for the fielding team
+    updateMatchDetails(fieldingTeam, { score, wickets, innings, overs })
+      .then((updatedDetails) => {
+        console.log('Second inning match details updated:', updatedDetails);
+      })
+      .catch((error) => {
+        console.error('Error updating second inning match details:', error);
+      });
+  }
+};
 
 
+const handleStartMatch = () => {
+  const { battingTeam, fieldingTeam } = selectedTeams;
 
+  // Ensure both batting and fielding teams are selected
+  if (!battingTeam || !fieldingTeam) {
+    alert('Please select both teams before starting the match.');
+    return;
+  }
+
+  // Create a new match record in the scores table with innings set to "first" for batting and "second" for fielding
+  createMatchRecord(battingTeam, 'first')
+    .then((createdRecord) => {
+      console.log('Match started:', createdRecord);
+      // Optionally, you can update the UI to reflect the match start
+    })
+    .catch((error) => {
+      console.error('Error starting the match:', error);
+    });
+
+  createMatchRecord(fieldingTeam, 'second')
+    .then((createdRecord) => {
+      console.log('Match started:', createdRecord);
+      // Optionally, you can update the UI to reflect the match start
+    })
+    .catch((error) => {
+      console.error('Error starting the match:', error);
+    });
+};
 
   return (
     <div className="admin-page">
@@ -90,6 +131,9 @@ function AdminDashboard() {
               ))}
             </select>
           </label>
+          <button className="start-match-button" onClick={handleStartMatch}>
+            Start Match
+          </button>
         </div>
         <div className="match-details">
           <h2>Match Details:</h2>
@@ -100,8 +144,8 @@ function AdminDashboard() {
               value={matchDetails.innings}
               onChange={(e) => setMatchDetails({ ...matchDetails, innings: e.target.value })}
             >
-              <option value="batting">Batting</option>
-              <option value="fielding">Fielding</option>
+              <option value="batting">First</option>
+              <option value="fielding">Second</option>
             </select>
           </label>
           <label>
