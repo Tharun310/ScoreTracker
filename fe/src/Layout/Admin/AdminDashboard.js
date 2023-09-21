@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { fetchTeams, updateMatchDetails, createMatchRecord } from "../../Service/adminapi";
-import { ToastContainer } from "react-toastify";
+import { ToastContainer, toast } from "react-toastify";
 import { CheckAdminComponent } from "../../Service/AdminSecurity";
 import './admin.css';
 
@@ -38,60 +38,54 @@ function AdminDashboard() {
   };
 
 
-const handleMatchDetailsUpdate = () => {
-  const { battingTeam, fieldingTeam } = selectedTeams;
+const handleMatchDetailsUpdate = async () => {
   const { innings, score, wickets, overs } = matchDetails;
-
-  if (innings === 'first') {
-    // Update the details for the batting team
-    updateMatchDetails(battingTeam, { score, wickets, innings, overs })
-      .then((updatedDetails) => {
-        console.log('First inning match details updated:', updatedDetails);
-      })
-      .catch((error) => {
-        console.error('Error updating first inning match details:', error);
-      });
-  } else if (innings === 'second') {
-    // Update the details for the fielding team
-    updateMatchDetails(fieldingTeam, { score, wickets, innings, overs })
-      .then((updatedDetails) => {
-        console.log('Second inning match details updated:', updatedDetails);
-      })
-      .catch((error) => {
-        console.error('Error updating second inning match details:', error);
-      });
+  const formdata = {
+    innings : innings,
+    score : score,
+    wickets : wickets,
+    overs : overs,
   }
+  console.log("score details:", formdata)
+    // Update the details for the batting team
+    updateMatchDetails(formdata)
+  
 };
 
 
-const handleStartMatch = () => {
+const handleStartMatch = async () => {
   const { battingTeam, fieldingTeam } = selectedTeams;
-
+  const formdata = {
+    battingTeam : battingTeam,
+    fieldingTeam : fieldingTeam,
+    innings : "first",
+  }
+  const formdata2 = {
+    battingTeam : fieldingTeam,
+    innings : "second",
+  }
   // Ensure both batting and fielding teams are selected
   if (!battingTeam || !fieldingTeam) {
     alert('Please select both teams before starting the match.');
     return;
   }
 
-  // Create a new match record in the scores table with innings set to "first" for batting and "second" for fielding
-  createMatchRecord(battingTeam, 'first')
-    .then((createdRecord) => {
-      console.log('Match started:', createdRecord);
-      // Optionally, you can update the UI to reflect the match start
-    })
-    .catch((error) => {
-      console.error('Error starting the match:', error);
-    });
+  let createscore = await createMatchRecord(formdata);
+  let createscore2 = await createMatchRecord(formdata2);
+  console.log('createscore',createscore);
+      
+        toast.success("Match has started");
+    };
 
-  createMatchRecord(fieldingTeam, 'second')
-    .then((createdRecord) => {
-      console.log('Match started:', createdRecord);
-      // Optionally, you can update the UI to reflect the match start
-    })
-    .catch((error) => {
-      console.error('Error starting the match:', error);
-    });
-};
+//   createMatchRecord(fieldingTeam, 'second')
+//     .then((createdRecord) => {
+//       console.log('Match started:', createdRecord);
+      
+//     })
+//     .catch((error) => {
+//       console.error('Error starting the match:', error);
+//     });
+// };
 
   return (
     <div className="admin-page">
@@ -144,8 +138,8 @@ const handleStartMatch = () => {
               value={matchDetails.innings}
               onChange={(e) => setMatchDetails({ ...matchDetails, innings: e.target.value })}
             >
-              <option value="batting">First</option>
-              <option value="fielding">Second</option>
+              <option value="first">first</option>
+              <option value="second">second</option>
             </select>
           </label>
           <label>

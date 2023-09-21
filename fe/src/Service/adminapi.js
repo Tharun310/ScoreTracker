@@ -15,33 +15,43 @@ export const fetchTeams = async () => {
 return getTeams;
 };
 
-export const updateMatchDetails = async (teamId, matchDetails) => {
-  try {
-    const response = await axios
-    .put(`${env.REACT_APP_API}/score/${teamId}`, matchDetails);
-    return response.data; // Assuming your API returns the updated match details.
-  } catch (error) {
-    console.error(`Error updating match details for team ${teamId}:`, error);
-    throw error;
-  }
-};
-
-export const createMatchRecord = async (teamId, innings) => {
-    let response = await axios
-    .post(`${env.REACT_APP_API}/admin/post_score`, {
-      team_id: teamId,
-      innings : innings,
-      score: 0, // Initialize with 0 score
-      wickets: 0, // Initialize with 0 wickets
-      overs: 0.0, // Initialize with 0.0 overs
+export const updateMatchDetails = async (formdata) => {
+  
+    let updateMatchDetails = await axios
+    .put(`${env.REACT_APP_API}/admin/update_score`, {
+      innings:formdata.innings,
+      score : formdata.score,
+      wickets : formdata.wickets,
+      overs : formdata.overs,
     })
     .then((res) => {
+      console("response",res)
       return res;
     })
     .catch((error) => {
       return error.response;
     });
-  return response;
+  return updateMatchDetails;
+};
+
+export const createMatchRecord = async (formdata) => {
+  console.log("formdata",formdata)
+    let createMatchRecord = await axios
+    .post(`${env.REACT_APP_API}/admin/post_score`, {
+      team_id: formdata.battingTeam,
+      innings : formdata.innings,
+      score: 0, // Initialize with 0 score
+      wickets: 0, // Initialize with 0 wickets
+      overs: 0.0, // Initialize with 0.0 overs
+    })
+    .then((res) => {
+      console("response",res)
+      return res;
+    })
+    .catch((error) => {
+      return error.response;
+    });
+  return createMatchRecord;
 };
 
 

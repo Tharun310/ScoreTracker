@@ -6,6 +6,7 @@ const { adminValidate } = require("../config/jwtConfig");
 
 router.get("/admin_validate", adminValidate, admin.validateAdmin);
 router.get("/get_teams", admin.getTeams)
-router.get("/post_score", admin.postScore)
+router.post("/post_score", admin.createMatchRecord)
+router.put("/update_score", admin.updateMatchDetails)
 
 module.exports = router;

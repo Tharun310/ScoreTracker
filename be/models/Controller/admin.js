@@ -38,56 +38,42 @@ const getTeams = async (req, res) => {
 };
 
 
-const postScore = async (req, res) => {
-  console.log(req.body);
+const createMatchRecord = async (req, res) => {
   try {
-    if (req.body.team_id && req.body.innings) {
-      let { team_id, innings, score, wickets, overs } = req.body;
-        await scores.create({
-          team_id : team_id,
-          innings : innings,
-          score : score,
-          wickets : wickets,
-          overs : overs,
-        });
-        
-        res.send({ status: 200, message: "Match Started" });
-    } else {
-      res.status(400).send({ message: "Delayed due to rain" });
-    }
+    let createMatchRecord = await scores.create(req.body);
+    res.status(200).send({ message: "First innings started" });
   } catch (error) {
-    res.status(500).send({ status: 400, message: "abonded" });
+    res.status(500).send({ message: "Internal error" });
   }
 };
 
-// const updateProjectAllocation = async (req, res) => {
-//   console.log(req.body);
-//   let findData = projects.findOne({
-//     where: {
-//       id: req.body.id,
-//     },
-//   });
-//   if (findData) {
-//     await projects.update(
-//       {
-//         project_name: req.body.project_name,
-//         employee_name: req.body.employee_name,
-//         employee_email: req.body.employee_email,
-//         project_manager: req.body.project_manager,
-//         start_date: req.body.start_date,
-//         end_date: req.body.end_date,
-//         status: req.body.status,
-//       },
-//       { where: { id: req.body.id } }
-//     );
 
-//     res.send({ statusCode: 200, message: "Updated" });
-//   } else {
-//     res.status(400).send("Update failed!");
-//   }
-// };
+const updateMatchDetails = async (req, res) => {
+  console.log(req.body);
+  let findData = scores.findOne({
+    where: {
+      innings: req.body.innings,
+    },
+  });
+  if (findData) {
+    await scores.update(
+      {
+        score: req.body.score,
+        wickets: req.body.wickets,
+        overs: req.body.overs,
+      },
+      { where: { innings: req.body.innings } }
+    );
+
+    res.send({ statusCode: 200, message: "Updated" });
+  } else {
+    res.status(400).send("Update failed!");
+  }
+};
+
 module.exports = {
   validateAdmin,
   getTeams,
-  postScore,
+  createMatchRecord,
+  updateMatchDetails,
 };

@@ -1,27 +1,29 @@
 module.exports = (sequelize, DataTypes) => {
     const Scorecard = sequelize.define("scores", {
-      team: {
+      id: {
+        type: DataTypes.INTEGER,
+        primaryKey: true,
+        autoIncrement: true,
+      },
+      team_id: {
         type: DataTypes.STRING,
         allowNull: false,
       },
       score: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.STRING,
         allowNull: false,
-        defaultValue: 0,
       },
       wickets: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.STRING,
         allowNull: false,
-        defaultValue: 0,
       },
       innings: {
-        type: DataTypes.ENUM('first', 'second'),
+        type: DataTypes.STRING,
         allowNull: false,
       },
       overs: {
-        type: DataTypes.FLOAT,
+        type: DataTypes.STRING,
         allowNull: false,
-        defaultValue: 0.0,
       },
     });
   
