@@ -1,5 +1,6 @@
 const db = require("../Entity");
 const users = db.users;
+const teams = db.teams;
 const { decodeToken } = require("../../config/jwtConfig");
 // Methods
 const validateAdmin = async (req, res) => {
@@ -21,6 +22,20 @@ const validateAdmin = async (req, res) => {
     res.status(400).send({ message: "Invalid user" });
   }
 };
+
+const getTeams = async (req, res) => {
+  try {
+    let getData = await teams.findAll();
+    if(getData){
+    res.status(200).send({ getData });
+  } else {
+    res.status(400).send({ message: "no Teams" });
+  }
+  } catch (error) {
+    res.status(500).send({ statusCode: 400, message: "Internal error" });
+  }
+};
+
 // const updateProjectAllocation = async (req, res) => {
 //   console.log(req.body);
 //   let findData = projects.findOne({
@@ -49,4 +64,5 @@ const validateAdmin = async (req, res) => {
 // };
 module.exports = {
   validateAdmin,
+  getTeams,
 };

@@ -7,22 +7,21 @@ module.exports = (sequelize, DataTypes) => {
       score: {
         type: DataTypes.INTEGER,
         allowNull: false,
+        defaultValue: 0,
       },
       wickets: {
         type: DataTypes.INTEGER,
         allowNull: false,
+        defaultValue: 0,
+      },
+      innings: {
+        type: DataTypes.ENUM('batting', 'fielding'),
+        allowNull: false,
       },
       overs: {
-        type: DataTypes.STRING,
+        type: DataTypes.FLOAT,
         allowNull: false,
-        validate: {
-          // Custom validation for overs format (e.g., 1.2, 2.3)
-          isValidOvers(value) {
-            if (!/^(\d+)\.(\d+)$/.test(value)) {
-              throw new Error('Overs should be in the format "x.y", e.g., 1.2');
-            }
-          },
-        },
+        defaultValue: 0.0,
       },
     });
   

@@ -2,24 +2,10 @@ import axios from "axios";
 import { env } from "../env";
 
 
-
-export const getEvent = async () => {
-  let getAllEvent = await axios
-    .get(`${env.REACT_APP_API}/dashboard/upcoming_event/get`)
-    .then((res) => {
-      return res;
-    })
-    .catch((error) => {
-      return error.response;
-    });
-  return getAllEvent;
-};
-
-
 // Fetch teams from the server
 export const fetchTeams = async () => {
   let getTeams = await axios
-  .get(`${env.REACT_APP_API}/dashboard/teams/get`)
+  .get(`${env.REACT_APP_API}/admin/get_teams`)
   .then((res) => {
     return res;
   })
@@ -29,15 +15,15 @@ export const fetchTeams = async () => {
 return getTeams;
 };
 
-// Fetch matches from the server
-export const fetchMatches = () => {
-  return axios.get(`${env.REACT_APP_API}/matches`);
+export const updateMatchDetails = async (teamId, matchDetails) => {
+  try {
+    const response = await axios
+    .put(`${env.REACT_APP_API}/score/${teamId}`, matchDetails);
+    return response.data; // Assuming your API returns the updated match details.
+  } catch (error) {
+    console.error(`Error updating match details for team ${teamId}:`, error);
+    throw error;
+  }
 };
 
-// Update the scorecard for a specific match and team
-export const updateScorecard = (matchId, teamId, data) => {
-  return axios.post(`${env.REACT_APP_API}/matches/${matchId}/scorecard`, {
-    teamId,
-    ...data,
-  });
-};
+
