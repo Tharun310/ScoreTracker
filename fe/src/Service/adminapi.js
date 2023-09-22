@@ -15,6 +15,18 @@ export const fetchTeams = async () => {
 return getTeams;
 };
 
+export const fetchLiveScore = async (innings) => {
+  let getScore = await axios
+  .get(`${env.REACT_APP_API}/admin/get_score/${innings}`)
+  .then((res) => {
+    return res;
+  })
+  .catch((error) => {
+    return error.response;
+  });
+return getScore;
+};
+
 export const updateMatchDetails = async (formdata) => {
   
     let updateMatchDetails = await axios

@@ -85,3 +85,68 @@ label {
     padding: 10px;
   }
 }
+
+.admin-content {
+  display: flex;
+  height: 100%;
+}
+
+.half {
+  flex: 1;
+  padding: 20px;
+}
+
+.left {
+  background-color: #fff; /* Left side background color */
+}
+
+.right {
+  background-color: #f7f7f7; /* Right side background color */
+}
+
+/* Style the input fields and labels (inside the right half) */
+.right label {
+  display: block;
+  font-size: 18px;
+  margin-bottom: 8px;
+  color: #333;
+}
+
+.right .match-input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 16px;
+}
+
+/* Style the live score section (inside the right half) */
+.live-score {
+  padding: 20px;
+  border-left: 1px solid #ccc;
+  display: none; /* Hide by default */
+}
+
+/* Display the live score section when 'second' innings is selected */
+.right .match-details select[value="second"] + .live-score {
+  display: block;
+}
+
+/* Responsive design for mobile */
+@media screen and (max-width: 768px) {
+  .admin-content {
+    flex-direction: column;
+  }
+
+  .half {
+    padding: 10px;
+  }
+
+  .right {
+    border-top: 1px solid #ccc;
+  }
+
+  .right .live-score {
+    border-left: none;
+  }
+}

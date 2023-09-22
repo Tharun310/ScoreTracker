@@ -37,6 +37,27 @@ const getTeams = async (req, res) => {
   }
 };
 
+const getLiveScore = async (req, res) => {
+  console.log(req.params);
+  try {
+    let livescore = await scores.findOne({
+      where: {
+        innings: req.params.innings,
+      },
+    });
+    console.log("team_id: ",livescore)
+    if (livescore) {
+      res.status(200).send({ livescore });
+    } else {
+      res
+        .status(400)
+        .send({ message: `live score not updated ${req.params.innings}` });
+    }
+  } catch (error) {
+    res.status(500).send({ message: "Internal error" });
+  }
+};
+
 
 const createMatchRecord = async (req, res) => {
   try {
@@ -76,4 +97,5 @@ module.exports = {
   getTeams,
   createMatchRecord,
   updateMatchDetails,
+  getLiveScore,
 };
