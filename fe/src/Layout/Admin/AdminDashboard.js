@@ -88,9 +88,8 @@ const handleStartMatch = async () => {
 // };
 
   return (
-    <div className="admin-page">
+  <div className="admin-page full-screen"> 
       <CheckAdminComponent />
-      <div className="admin-container">
       <ToastContainer />
         <h1 className="admin-heading">Admin Page</h1>
         <div className="team-selection">
@@ -173,8 +172,7 @@ const handleStartMatch = async () => {
             Update Match Details
           </button>
         </div>
-      </div>
-    </div>
+   </div> 
   );
 }
 
