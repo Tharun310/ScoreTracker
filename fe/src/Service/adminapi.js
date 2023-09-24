@@ -46,11 +46,27 @@ export const updateMatchDetails = async (formdata) => {
   return updateMatchDetails;
 };
 
+
+export const updateStatus = async () => {
+  
+  let updateMatchStatus = await axios
+  .put(`${env.REACT_APP_API}/admin/update_status`)
+  .then((res) => {
+    console("response",res)
+    return res;
+  })
+  .catch((error) => {
+    return error.response;
+  });
+return updateMatchStatus;
+};
+
+
 export const createMatchRecord = async (formdata) => {
   console.log("formdata",formdata)
     let createMatchRecord = await axios
     .post(`${env.REACT_APP_API}/admin/post_score`, {
-      team_id: formdata.battingTeam,
+      team: formdata.battingTeam,
       innings : formdata.innings,
       score: 0, // Initialize with 0 score
       wickets: 0, // Initialize with 0 wickets

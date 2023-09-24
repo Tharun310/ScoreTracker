@@ -8,6 +8,7 @@ router.post("/signup", user.create);
 
 router.post("/login", user.login);
 router.get("/validate", validate, user.validateUser);
+router.get("/get_liveUpdates", user.liveUpdates);
 
 // router.get("/validate", validate);
 

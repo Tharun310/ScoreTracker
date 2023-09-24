@@ -1,5 +1,6 @@
 const db = require("../Entity");
 const users = db.users;
+const score = db.scores
 const bcrypt = require("bcryptjs");
 const { createToken, decodeToken } = require("../../config/jwtConfig");
 // const user = require("../Entity/user");
@@ -84,6 +85,21 @@ const validateUser = async (req, res) => {
   }
 };
 
+const liveUpdates = async (req, res) => {
+  try{
+  let getData = await score.findAll();
+  console.log("updatedlive",getData)
+  if (getData) {
+    res.status(200).send({ getData });
+    
+  } else {
+    res.status(400).send({ message: "Invalid user" });
+  }
+} catch (error) {
+      res.status(500).send({ statusCode: 400, message: "Internal error" });
+    }
+};
+
 // const managerList = async (req, res) => {
 //   try {
 //     let managerList = await manager.findAll();
@@ -125,4 +141,5 @@ module.exports = {
   create,
   login,
   validateUser,
+  liveUpdates,
 };

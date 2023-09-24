@@ -5,7 +5,7 @@ module.exports = (sequelize, DataTypes) => {
         primaryKey: true,
         autoIncrement: true,
       },
-      team_id: {
+      team: {
         type: DataTypes.STRING,
         allowNull: false,
       },
@@ -24,6 +24,10 @@ module.exports = (sequelize, DataTypes) => {
       overs: {
         type: DataTypes.STRING,
         allowNull: false,
+      },
+      completed: {
+        type: DataTypes.STRING,
+        defaultValue: "0",
       },
     });
   

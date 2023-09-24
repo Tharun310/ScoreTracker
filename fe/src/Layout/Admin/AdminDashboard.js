@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo} from 'react';
-import { fetchTeams, updateMatchDetails, createMatchRecord } from "../../Service/adminapi";
+import { fetchTeams, updateMatchDetails, createMatchRecord, updateStatus } from "../../Service/adminapi";
 import { ToastContainer, toast } from "react-toastify";
 import { CheckAdminComponent } from "../../Service/AdminSecurity";
 import { fetchLiveScore } from '../../Service/adminapi';
@@ -15,7 +15,7 @@ function AdminDashboard() {
   const [matchDetails, setMatchDetails] = useState({ innings: 'first', score: 0, wickets: 0, overs: 0 });
   const [liveScore, setLiveScore] = useState({
     "0" : {
-      team_id : '',
+      team : '',
       score : '',
       wickets : '',
       overs : '',
@@ -40,7 +40,7 @@ function AdminDashboard() {
     let fetchData = getScoreDetails.data;
         if (getScoreDetails.status === 200) {
           let myData = [
-            { team_id: fetchData.livescore.team_id, 
+            { team: fetchData.livescore.team, 
             score: fetchData.livescore.score,
             wickets : fetchData.livescore.wickets,
             innings : fetchData.livescore.innings,
@@ -61,14 +61,14 @@ function AdminDashboard() {
   const loadData = async () => {
     let getTeamDetails = await fetchTeams();
     // console.log(getTeamDetails.data.getData)
-   
+   console.log("getTeamDetails",getTeamDetails)
     const teamsArray = Object.values(getTeamDetails.data.getData);
-    // console.log(teamsArray);
+    console.log("teamsArray",teamsArray);
     try {
       if (getTeamDetails.status === 200) {
         teams = teamsArray;
         setTeams(teamsArray);
-        console.log(teams);
+        // console.log(teams);
       }
     } catch (error) {
       console.log(error);
@@ -92,12 +92,21 @@ const handleMatchDetailsUpdate = async () => {
     wickets : wickets,
     overs : overs,
   }
+
+  if(innings === "second"){
+    updateStatus()
+  }
+
   console.log("score details:", formdata)
     // Update the details for the batting team
     updateMatchDetails(formdata)
     loadlivescore();
     loadlivescore();
 };
+
+
+
+
 
 
 const handleStartMatch = async () => {
@@ -147,7 +156,7 @@ const handleStartMatch = async () => {
               <option value="">Select a Team</option>
               {/* Render teams dynamically */}
               {teams.map((team) => (
-                <option key={team.team_id} value={team.team_id}>
+                <option key={team.team_id} value={team.team_nmae}>
                   {team.team_name}
                 </option>
               ))}
@@ -165,7 +174,7 @@ const handleStartMatch = async () => {
               <option value="">Select a Team</option>
               {/* Render teams dynamically */}
               {teams.map((team) => (
-                <option key={team.team_id} value={team.team_id}>
+                <option key={team.team_id} value={team.team_name}>
                   {team.team_name}
                 </option>
               ))}
@@ -175,9 +184,9 @@ const handleStartMatch = async () => {
             Start Match
           </button>
         </div>
-        {liveScore['0'].team_id ? (
+        {liveScore['0'].team ? (
             <div>
-              <p>Team: {liveScore['0'].team_id}</p>
+              <p>Team: {liveScore['0'].team}</p>
               <p>Score: {liveScore['0'].score}</p>
               <p>Wickets: {liveScore['0'].wickets}</p>
               <p>Overs: {liveScore['0'].overs}</p>

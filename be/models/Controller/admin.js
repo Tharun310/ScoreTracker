@@ -61,12 +61,34 @@ const getLiveScore = async (req, res) => {
 
 const createMatchRecord = async (req, res) => {
   try {
+    console.log(req.body)
     let createMatchRecord = await scores.create(req.body);
     res.status(200).send({ message: "First innings started" });
   } catch (error) {
     res.status(500).send({ message: "Internal error" });
   }
 };
+
+const updateMatchStatus = async (req, res) => {
+  let findData = scores.findOne({
+    where: {
+      innings: "second",
+    },
+  });
+  if (findData) {
+    await scores.update(
+      {
+        completed: "1",
+      },
+      { where: { innings: "first" } }
+    );
+
+    res.send({ statusCode: 200, message: "First innings completed" });
+  } else {
+    res.status(400).send("Update failed!");
+  }
+};
+
 
 
 const updateMatchDetails = async (req, res) => {
@@ -98,4 +120,5 @@ module.exports = {
   createMatchRecord,
   updateMatchDetails,
   getLiveScore,
+  updateMatchStatus,
 };
