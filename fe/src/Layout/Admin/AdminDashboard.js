@@ -22,20 +22,39 @@ function AdminDashboard() {
       innings : '',
     }
   });
-  const [targetScore, setTargetScore] = useState("0")
 
-  // const fetchLiveScore = async (innings) => {
-  //   try {
-      
-  //     const response = await axios.get(`/api/live-score?innings=${innings}`);
-  //     return response.data;
-  //   } catch (error) {
-  //     throw new Error('Error fetching live score: ' + error.message);
-  //   }
-  // };
+  const [errors, setErrors] = useState({}); // State to store validation errors
+
+  // Validation functions
+  const validateScore = (score) => {
+    if (!/^\d+$/.test(score) || parseInt(score) < 0) {
+      return 'Score must be a positive number.';
+    }
+    return '';
+  };
+
+  const validateWickets = (wickets) => {
+    if (!/^\d+$/.test(wickets) || parseInt(wickets) < 0 || parseInt(wickets) > 10) {
+      return 'Wickets must be a number between 0 and 10.';
+    }
+    return '';
+  };
+
+  const validateOvers = (overs) => {
+    if (!/^(\d{1,2}(\.\d{1,2})?|20|0\.[1-5]|20\.0?)$/.test(overs)) {
+      return 'Overs must be a valid decimal between 0.0 and 20';
+    }
+    return '';
+  };
+
+
+
+
+
 
   const loadlivescore = async () => {
     try {
+     
     let getScoreDetails = await fetchLiveScore(matchDetails.innings);
     let fetchData = getScoreDetails.data;
         if (getScoreDetails.status === 200) {
@@ -57,6 +76,8 @@ function AdminDashboard() {
   useMemo(() => {
     loadlivescore();
   }, []);
+
+
 
   const loadData = async () => {
     let getTeamDetails = await fetchTeams();
@@ -83,6 +104,7 @@ function AdminDashboard() {
   };
 
 
+
 const handleMatchDetailsUpdate = async () => {
  
   const { innings, score, wickets, overs } = matchDetails;
@@ -93,15 +115,32 @@ const handleMatchDetailsUpdate = async () => {
     overs : overs,
   }
 
-  if(innings === "second"){
-    updateStatus()
-  }
+  const scoreError = validateScore(matchDetails.score);
+  const wicketsError = validateWickets(matchDetails.wickets);
+  const oversError = validateOvers(matchDetails.overs);
 
+  if (scoreError || wicketsError || oversError) {
+    setErrors({
+      score: scoreError,
+      wickets: wicketsError,
+      overs: oversError,
+    });
+  } else {
+    setErrors({
+      score: '',
+      wickets: '',
+      overs: '',
+    });
+
+  if(innings === "second" || matchDetails.wickets === '10' || matchDetails.overs == '20.0'){
+    updateStatus(matchDetails.innings);
+  }
   console.log("score details:", formdata)
     // Update the details for the batting team
     updateMatchDetails(formdata)
     loadlivescore();
     loadlivescore();
+}
 };
 
 
@@ -190,9 +229,6 @@ const handleStartMatch = async () => {
               <p>Score: {liveScore['0'].score}</p>
               <p>Wickets: {liveScore['0'].wickets}</p>
               <p>Overs: {liveScore['0'].overs}</p>
-              {selectedTeams.innings === 'second' && (
-                <p>Target Score: {liveScore.target}</p>
-              )}
             </div>
           ) : (
             <p>Loading live score...</p>
@@ -227,6 +263,7 @@ const handleStartMatch = async () => {
                 setMatchDetails({ ...matchDetails, score: e.target.value })
               }
             />
+            <p className="error-message">{errors.score}</p>
           </label>
           <label>
             Wickets:
@@ -238,17 +275,22 @@ const handleStartMatch = async () => {
                 setMatchDetails({ ...matchDetails, wickets: e.target.value })
               }
             />
+            {errors.wickets && (<p className="error-message">{errors.wickets}</p>)}
           </label>
           <label>
             Overs:
             <input
-              className="match-input"
-              type="number"
-              value={matchDetails.overs}
-              onChange={(e) =>
-                setMatchDetails({ ...matchDetails, overs: e.target.value })
-              }
-            />
+          className="match-input"
+          type="number"
+          step="0.1"
+          min="0"
+          max="5.9"
+          value={matchDetails.overs}
+          onChange={(e) =>
+            setMatchDetails({ ...matchDetails, overs: e.target.value })
+          }
+        />
+        <p className="error-message">{errors.overs}</p>
           </label>
           <button className="update-button" onClick={handleMatchDetailsUpdate}>
             Update Match Details

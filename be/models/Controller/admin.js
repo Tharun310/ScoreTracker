@@ -38,7 +38,7 @@ const getTeams = async (req, res) => {
 };
 
 const getLiveScore = async (req, res) => {
-  console.log(req.params);
+  console.log("livescore innings:",req.params);
   try {
     let livescore = await scores.findOne({
       where: {
@@ -70,9 +70,10 @@ const createMatchRecord = async (req, res) => {
 };
 
 const updateMatchStatus = async (req, res) => {
+  console.log("status innings:",req.params);
   let findData = scores.findOne({
     where: {
-      innings: "second",
+      innings: req.params.innings,
     },
   });
   if (findData) {
@@ -80,7 +81,7 @@ const updateMatchStatus = async (req, res) => {
       {
         completed: "1",
       },
-      { where: { innings: "first" } }
+      { where: { innings: req.params.innings, } }
     );
 
     res.send({ statusCode: 200, message: "First innings completed" });

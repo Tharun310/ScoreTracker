@@ -6,8 +6,8 @@ export const employeeloginSchema = yup.object().shape({
     .email("Please enter a valid email")
     .test(
       "email-domain",
-      "Enter your organization email",
-      (value) => value && value.toLowerCase().endsWith("@jmangroup.com")
+      "Enter your email",
+      (value) => value && value.toLowerCase().endsWith("@gmail.com")
     )
     .required("*Required"),
   password: yup.string().required("*Required"),
@@ -20,8 +20,8 @@ export const employeeSignupSchema = yup.object().shape({
     .email("Please enter a valid email")
     .test(
       "email-domain",
-      "Enter your organization email",
-      (value) => value && value.toLowerCase().endsWith("@jmangroup.com")
+      "Enter your email",
+      (value) => value && value.toLowerCase().endsWith("@gmail.com")
     )
     .required("*Required"),
   password: yup

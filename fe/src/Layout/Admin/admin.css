@@ -132,6 +132,11 @@ label {
   display: block;
 }
 
+.error-message{
+  color: red;
+}
+
+
 /* Responsive design for mobile */
 @media screen and (max-width: 768px) {
   .admin-content {

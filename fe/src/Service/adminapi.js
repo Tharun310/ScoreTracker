@@ -47,10 +47,9 @@ export const updateMatchDetails = async (formdata) => {
 };
 
 
-export const updateStatus = async () => {
-  
+export const updateStatus = async (innings) => {
   let updateMatchStatus = await axios
-  .put(`${env.REACT_APP_API}/admin/update_status`)
+  .put(`${env.REACT_APP_API}/admin/update_status/${innings}`)
   .then((res) => {
     console("response",res)
     return res;

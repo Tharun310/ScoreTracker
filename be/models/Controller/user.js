@@ -10,7 +10,7 @@ const create = async (req, res) => {
     if (req.body.password && req.body.email) {
       let { fullName, password, email } = req.body;
       email = email.toLowerCase();
-      if (email.endsWith("@jmangroup.com")) {
+      if (email.endsWith("@gmail.com")) {
         await users.create({
           fullName,
           email,

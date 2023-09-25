@@ -118,7 +118,7 @@ function Login() {
             </form>
             <div className="signup-submit-div">
               <div className="singup-button-login-page">
-                <p className="text-info-ls">New to Organization?</p>
+                <p className="text-info-ls">New to SportZzBuzz.?</p>
                 <button
                   className="button signup__submit"
                   onClick={() => navigate("/signup")}
