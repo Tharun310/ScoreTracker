@@ -11,6 +11,7 @@ import './admin.css';
 
 function AdminDashboard() {
   var [teams, setTeams] = useState([]);
+  const [target, setTarget] = useState(0)
   const [selectedTeams, setSelectedTeams] = useState({ battingTeam: '', fieldingTeam: '' });
   const [matchDetails, setMatchDetails] = useState({ innings: 'first', score: 0, wickets: 0, overs: 0 });
   const [liveScore, setLiveScore] = useState({
@@ -132,8 +133,18 @@ const handleMatchDetailsUpdate = async () => {
       overs: '',
     });
 
-  if(innings === "second" || matchDetails.wickets === '10' || matchDetails.overs == '20.0'){
+  if(matchDetails.wickets === '10' || matchDetails.overs === '20'){
+    if(matchDetails.innings == 'first'){
+      setTarget(parseInt(matchDetails.score)+1)
+      console.log("Target:",target)
+    }
     updateStatus(matchDetails.innings);
+  }
+  if(matchDetails.innings === 'second'){
+    updateStatus("first");
+    if( parseInt(matchDetails.score) > target){
+      updateStatus(matchDetails.innings)
+    }
   }
   console.log("score details:", formdata)
     // Update the details for the batting team

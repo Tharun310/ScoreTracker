@@ -77,6 +77,8 @@ const UserPage = () => {
   }, [liveScores]);
 
 
+
+
   return (
     <>
 
@@ -86,31 +88,38 @@ const UserPage = () => {
       <div className="user-title">
       <h1>SportZ Buzz....</h1>
       </div>
-      {liveScores[0].completed === '1' && (
-          <div className="right-card target-card">
-          <h2>Target</h2>
-          <p>{liveScores[0].score}</p>
-        </div>
-      )}
-    <div className="innings-container">
-      <div className="innings">
-        <h2>{liveScores[0].team}</h2>
-        <div className="profile-photo">
-            <p>{liveScores[0].team.charAt(0)}</p></div>
-        {liveScores[0].completed === '0' && (
-        <div className="team-details">
-          <p>Score: {liveScores[0].score}</p>
-          <p>Wickets: {liveScores[0].wickets}</p>
-          <p>Overs: {liveScores[0].overs}</p>
-        </div>
-      )}
+      {liveScores[0].completed === "" ? (
+        
+            <div>
+               <p>Loading live score...</p>
+            </div>
+          ) : (
+            <div>
+                 {liveScores[0].completed === '1' && (
+              <div className="right-card target-card">
+              <h2>Target</h2>
+              <p>{parseInt(liveScores[0].score)+1}</p>
+            </div>
+          )}
+          <div className="innings-container">
+          <div className="innings">
+            <h2>{liveScores[0].team}</h2>
+            <div className="profile-photo">
+                <p>{liveScores[0].team.charAt(0)}</p></div>
+            {liveScores[0].completed === '0' && (
+            <div className="team-details">
+              <p>Score: {liveScores[0].score}</p>
+              <p>Wickets: {liveScores[0].wickets}</p>
+              <p>Overs: {liveScores[0].overs}</p>
+            </div>
+          )}
       
-      {liveScores[0].completed === '1' && (
-        <h1>{liveScores[0].score}/{liveScores[0].wickets}</h1>
-      )}
-      </div>
+          {liveScores[0].completed === '1' && (
+            <h1>{liveScores[0].score}/{liveScores[0].wickets}</h1>
+          )}
+          </div>
       
-      <div className="innings">
+        <div className="innings">
           <h2>{liveScores[1].team}</h2>
           <div className="profile-photo">
             <p>{liveScores[1].team.charAt(0)}</p></div>
@@ -124,13 +133,15 @@ const UserPage = () => {
           {liveScores[1].completed === '1' && (
         <h1>{liveScores[1].score}/{liveScores[1].wickets}</h1>
         )}
-      </div>
-    </div>
-        {matchResult && (
-        <div className="result-card">
-          {matchResult}
         </div>
-      )}
+        </div>
+          {matchResult && (
+          <div className="result-card">
+            {matchResult}
+        </div>
+        )}
+            </div>
+          )}
     </div>
     </>
   );
